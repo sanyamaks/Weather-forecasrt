@@ -1,0 +1,25 @@
+.weather-for-the-days {
+  display: flex;
+  justify-content: center;
+}
+
+.weather-for-the-day {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 200px;
+  min-width: 200px;
+  height: 400px;
+  background: #ebebeb;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.weather-conditions-for-image{
+  width: 100%;
+}
+
+.weather-conditions-image{
+  width: 100%;
+}
