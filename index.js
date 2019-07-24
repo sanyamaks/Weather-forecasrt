@@ -421,16 +421,17 @@ const DATA = [
   },
   {}
 ];
-let numberOfCards = 4;
+const MSEC_IN_DAY = 86400000;
+const numberOfCards = 4;
+const LOWERVALUE = 0; //lower range value; today = 0
+const UPPERVALUE = 5; //upper range value; today = 0
 let minWeatherCard = 0; // day of the first card relative to today = 0
 let maxWeatherCard = minWeatherCard + numberOfCards;
-let lowerValue = 0; //lower range value; today = 0
-let upperValue = 5; //upper range value; today = 0
 
 function statusImg(cloudiness, snow, rain) {
-  if (snow === true) {
+  if (snow) {
     return "img/Status-weather-snow-scattered-icon.png";
-  } else if (rain === true) {
+  } else if (rain) {
     return "img/Status-weather-showers-scattered-icon.png";
   } else if (cloudiness === "Облачно") {
     return "img/Status-weather-many-clouds-icon.png";
@@ -508,7 +509,7 @@ function reloadPage() {
 }
 
 function goLeft() {
-  if (minWeatherCard <= lowerValue) {
+  if (minWeatherCard <= LOWERVALUE) {
     return null;
   } else {
     minWeatherCard--;
@@ -518,7 +519,7 @@ function goLeft() {
 }
 
 function goRight() {
-  if (maxWeatherCard >= upperValue) {
+  if (maxWeatherCard >= UPPERVALUE) {
     return null;
   } else {
     minWeatherCard++;
@@ -576,7 +577,10 @@ function weatherCardsItem(
   weatherForTheDay.appendChild(temperatureAfternoon);
 
   let temperatureAfternoonH3 = document.createElement("h3");
-  temperatureAfternoonH3.textContent = "Днем " + tempAfternoon;
+  temperatureAfternoonH3.textContent =
+    tempAfternoon > 0
+      ? "Днем +" + tempAfternoon + "°C"
+      : "Днем " + tempAfternoon + "°C";
   temperatureAfternoon.appendChild(temperatureAfternoonH3);
 
   let temperatureAtNight = document.createElement("div");
@@ -584,17 +588,23 @@ function weatherCardsItem(
   weatherForTheDay.appendChild(temperatureAtNight);
 
   let temperatureAfternoonH4 = document.createElement("h4");
-  temperatureAfternoonH4.textContent = "Ночью " + tempAtNight;
+  temperatureAfternoonH4.textContent =
+    tempAfternoon > 0
+      ? "Ночью +" + tempAtNight + "°C"
+      : "Ночью " + tempAtNight + "°C";
   temperatureAfternoon.appendChild(temperatureAfternoonH4);
 
   let weatherConditions = document.createElement("div");
   weatherConditions.className = "weather-conditions";
   weatherForTheDay.appendChild(weatherConditions);
 
-  let weatherConditionsH5 = document.createElement("h5");
-  weatherConditionsH5.textContent =
-    cloudiness + ", " + status(cloudiness, snow, rain);
-  weatherConditions.appendChild(weatherConditionsH5);
+  let weatherConditionsH51 = document.createElement("h5");
+  weatherConditionsH51.textContent = cloudiness + ",";
+  weatherConditions.appendChild(weatherConditionsH51);
+
+  let weatherConditionsH52 = document.createElement("h5");
+  weatherConditionsH52.textContent = status(cloudiness, snow, rain);
+  weatherConditions.appendChild(weatherConditionsH52);
 }
 
 function weatherCards() {
@@ -607,8 +617,8 @@ function weatherCards() {
 
   for (let j = minWeatherCard; j < maxWeatherCard; j++) {
     for (let i = 0; i < DATA.length; i++) {
-      let timestampDay = new Date(timestampToday + j * 86400000);
-      if (timestampToday + j * 86400000 === DATA[i]["date"]) {
+      let timestampDay = new Date(timestampToday + j * MSEC_IN_DAY);
+      if (timestampToday + j * MSEC_IN_DAY === DATA[i]["date"]) {
         let tempAfternoon = String(DATA[i]["temperature"]["day"]);
         let tempAtNight = String(DATA[i]["temperature"]["night"]);
         let cloudiness = String(DATA[i]["cloudiness"]);
@@ -654,7 +664,7 @@ function loadPage() {
 
   let arrowLeft = document.createElement("div");
   arrowLeft.className =
-    minWeatherCard <= lowerValue
+    minWeatherCard <= LOWERVALUE
       ? "arrow-left arrow-left--no-active"
       : "arrow-left";
   arrowLeft.onclick = function() {
@@ -666,7 +676,7 @@ function loadPage() {
 
   let arrowRight = document.createElement("div");
   arrowRight.className =
-    maxWeatherCard >= upperValue
+    maxWeatherCard >= UPPERVALUE
       ? "arrow-right arrow-right--no-active"
       : "arrow-right";
   arrowRight.onclick = function() {
