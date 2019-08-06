@@ -428,7 +428,7 @@ const UPPERVALUE = 5; //upper range value; today = 0
 let minWeatherCard = 0; // day of the first card relative to today = 0
 let maxWeatherCard = minWeatherCard + numberOfCards;
 
-function statusImg(cloudiness, snow, rain) {
+statusImg = (cloudiness, snow, rain) => {
   if (snow) {
     return "img/Status-weather-snow-scattered-icon.png";
   } else if (rain) {
@@ -438,9 +438,9 @@ function statusImg(cloudiness, snow, rain) {
   } else {
     return "img/Status-weather-clear-icon.png";
   }
-}
+};
 
-function status(cloudiness, snow, rain) {
+condition = (cloudiness, snow, rain) => {
   if (snow === true) {
     return "Снег";
   } else if (rain === true) {
@@ -450,22 +450,18 @@ function status(cloudiness, snow, rain) {
   } else {
     return "Без осадков";
   }
-}
+};
 
-function isToday(today) {
+isToday = today => {
   let currentTime = new Date();
-  if (
+  return (
     currentTime.getFullYear() === today.getFullYear() &&
     currentTime.getMonth() === today.getMonth() &&
     currentTime.getDate() === today.getDate()
-  ) {
-    return true;
-  } else {
-    return false;
-  }
-}
+  );
+};
 
-function dayOfTheWeekNames(today) {
+dayOfTheWeekNames = today => {
   const array = [
     "Воскресенье",
     "Понедельник",
@@ -476,9 +472,9 @@ function dayOfTheWeekNames(today) {
     "Суббота"
   ];
   return array[today.getDay()];
-}
+};
 
-function monthNames(today) {
+monthNames = today => {
   const array = [
     "января",
     "февраля",
@@ -494,9 +490,9 @@ function monthNames(today) {
     "декабря"
   ];
   return array[today.getMonth()];
-}
+};
 
-function reloadPage() {
+reloadPage = () => {
   let weatherForecast = document.getElementsByClassName("weather-forecast");
   let weatherForTheDays = document.getElementsByClassName(
     "weather-for-the-days"
@@ -506,9 +502,9 @@ function reloadPage() {
   weatherForecast[0].removeChild(weatherForTheDays[0]);
   weatherForecast[0].removeChild(headline[0]);
   loadPage();
-}
+};
 
-function goLeft() {
+goLeft = () => {
   if (minWeatherCard <= LOWERVALUE) {
     return null;
   } else {
@@ -516,9 +512,9 @@ function goLeft() {
     maxWeatherCard--;
     reloadPage();
   }
-}
+};
 
-function goRight() {
+goRight = () => {
   if (maxWeatherCard >= UPPERVALUE) {
     return null;
   } else {
@@ -526,16 +522,16 @@ function goRight() {
     maxWeatherCard++;
     reloadPage();
   }
-}
+};
 
-function weatherCardsItem(
+weatherCardsItem = (
   timestampDay,
   tempAfternoon,
   tempAtNight,
   cloudiness,
   snow,
   rain
-) {
+) => {
   let weatherForTheDays = document.getElementsByClassName(
     "weather-for-the-days"
   );
@@ -603,11 +599,11 @@ function weatherCardsItem(
   weatherConditions.appendChild(weatherConditionsH51);
 
   let weatherConditionsH52 = document.createElement("h5");
-  weatherConditionsH52.textContent = status(cloudiness, snow, rain);
+  weatherConditionsH52.textContent = condition(cloudiness, snow, rain);
   weatherConditions.appendChild(weatherConditionsH52);
-}
+};
 
-function weatherCards() {
+weatherCards = () => {
   let currentTimeNow = new Date();
   let year = currentTimeNow.getFullYear();
   let month = currentTimeNow.getMonth();
@@ -635,9 +631,9 @@ function weatherCards() {
       }
     }
   }
-}
+};
 
-function loadPage() {
+loadPage = () => {
   let weatherForecast = document.getElementsByClassName("weather-forecast");
 
   let headline = document.createElement("div");
@@ -683,4 +679,4 @@ function loadPage() {
     goRight();
   };
   weatherForTheDays.appendChild(arrowRight);
-}
+};
